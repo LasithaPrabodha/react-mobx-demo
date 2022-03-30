@@ -1,32 +1,25 @@
 import React from "react";
 import { Button, Input, Flex, Checkbox, Heading, SimpleGrid } from "@chakra-ui/react";
+import { inject, observer } from "mobx-react";
+import { Todo } from "../store/todo.store";
 
 
+@inject('todoStore')
+@observer
 export default class TodoList extends React.Component<any> {
-
-    state = {
-        todos: []
-    }
-
-    componentDidMount() {
-        fetch("assets/json/todos.json").then(response => response.json()).then(todos => this.setState(state => ({ ...state, todos: todos })))
-
-    }
     render() {
-
-        const todos = this.state.todos;
         return (
             <>
                 <SimpleGrid columns={2} spacing={10}>
                     <Heading>Todo List</Heading>
 
-                    <Checkbox onChange={(e) => { }}>Show only completed</Checkbox>
+                    <Checkbox onChange={(e) => this.props.todoStore.showCompleted(e.target.checked)}>Show only completed</Checkbox>
                 </SimpleGrid>
                 {
-                    todos.map((todo: any) => (
+                    this.props.todoStore.getTodos.map((todo: Todo) => (
                         <Flex pt={2} key={todo.id}>
                             <Checkbox
-                                onChange={(e) => { }}
+                                onChange={(e) => this.props.todoStore.setCompleted(todo.id, e.target.checked)}
                                 checked={todo.done}
                             />
                             <Input
@@ -36,7 +29,7 @@ export default class TodoList extends React.Component<any> {
                             />
                             <Button
                                 onClick={() => {
-
+                                    this.props.todoStore.removeTodo(todo.id);
                                 }}
                             >
                                 Delete

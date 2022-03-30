@@ -1,11 +1,15 @@
 import React from "react";
 import { Button, Input, Grid } from "@chakra-ui/react";
+import { inject, observer } from "mobx-react";
 
+@inject('todoStore')
+@observer
 export default class TodoAdd extends React.Component<any> {
     state = {
         newTodo: ''
     }
     addTodo = () => {
+        this.props.todoStore.addTodo(this.state.newTodo);
         this.setState(state => ({ newTodo: '' }));
     }
 

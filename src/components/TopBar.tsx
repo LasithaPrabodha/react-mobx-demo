@@ -1,12 +1,17 @@
 import React from "react";
 import { Button, Grid } from "@chakra-ui/react";
+import { inject, observer } from "mobx-react";
 
+@inject('todoStore', 'authStore')
+@observer
 export class TopBar extends React.Component<any> {
 
     onLoad = () => {
+        this.props.todoStore.load();
     };
 
     signOut = () => {
+        this.props.authStore.signOut()
     }
 
     render() {

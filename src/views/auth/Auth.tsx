@@ -1,10 +1,13 @@
 import React from "react";
 
 import { Box, Button, Input } from "@chakra-ui/react";
+import { inject, observer } from "mobx-react";
 
 import "./Auth.css";
 import { Navigate } from "react-router-dom";
 
+@inject('authStore')
+@observer
 export default class AuthV extends React.Component<any> {
     state = {
         email: '',
@@ -13,8 +16,9 @@ export default class AuthV extends React.Component<any> {
     }
 
     login = async () => {
+        const loggedIn = await this.props.authStore.login({ email: this.state.email, password: this.state.password })
 
-        this.setState(state => ({ ...state, loggedIn: true }))
+        if (loggedIn) this.setState(state => ({ ...state, loggedIn: true }))
     }
 
     render() {
