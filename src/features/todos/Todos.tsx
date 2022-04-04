@@ -4,8 +4,7 @@ import TopBar from "../../components/TopBar";
 import TodoList from "../../components/TodoList";
 import TodoAdd from "../../components/TodoAdd";
 
-export default class Todo extends React.Component<any> {
-
+export default class Todos extends React.Component<any> {
     render() {
         return (
             <ChakraProvider theme={theme}>
