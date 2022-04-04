@@ -10,6 +10,20 @@ axiosClient.defaults.headers = { ...axiosClient.defaults.headers, ...constants.h
 // To share cookies to cross site domain, change to true.
 axiosClient.defaults.withCredentials = false;
 
+axiosClient.interceptors.request.use(
+    config => {
+        if (config.headers) config.headers.Authorization = "Bearer " + getToken();
+
+        return config;
+    },
+    error => {
+        Promise.reject(error);
+    }
+);
+
+function getToken() {
+    return localStorage.getItem('access_token') || ''
+}
 export function getRequest(URL: string) {
     return axiosClient.get(`/${URL}`).then(response => response);
 }

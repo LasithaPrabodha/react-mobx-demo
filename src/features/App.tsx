@@ -1,14 +1,18 @@
-import React, { Suspense } from 'react';
+import React, { Suspense, useEffect } from 'react';
 import { ChakraProvider } from '@chakra-ui/react';
 import { BrowserRouter as Router, Route, Routes, Navigate, Outlet } from 'react-router-dom';
 
 import Auth from './auth/Auth';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../app/store';
 import routes from './routes';
+import { init } from './auth/AuthSlice';
 
 const App = () => {
   const isAuthenticated = useSelector((state: RootState) => state.authentication.isAuthenticated)
+  const dispatch = useDispatch();
+
+  useEffect(() => { dispatch(init()) }, [])
 
   return (
     <ChakraProvider>

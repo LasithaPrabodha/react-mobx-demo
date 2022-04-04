@@ -1,51 +1,51 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Button, Input, Flex, Checkbox, Heading, SimpleGrid } from "@chakra-ui/react";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../app/store";
+import { loadTodos, removeTodo, setCompleted, setText, showCompleted } from "../features/todos/TodoSlice";
 
 
-export default class TodoList extends React.Component<any> {
+export default function TodoList() {
+    const todos = useSelector((state: RootState) => state.todos.todos)
 
-    state = {
-        todos: []
-    }
+    const dispatch = useDispatch();
 
-    componentDidMount() {
-        fetch("assets/json/todos.json").then(response => response.json()).then(todos => this.setState(state => ({ ...state, todos: todos })))
+    useEffect(() => {
+        dispatch(loadTodos())
+    }, []);
 
-    }
-    render() {
 
-        const todos = this.state.todos;
-        return (
-            <>
-                <SimpleGrid columns={2} spacing={10}>
-                    <Heading>Todo List</Heading>
+    return (
+        <>
+            <SimpleGrid columns={2} spacing={10}>
+                <Heading>Todo List</Heading>
 
-                    <Checkbox onChange={(e) => { }}>Show only completed</Checkbox>
-                </SimpleGrid>
-                {
-                    todos.map((todo: any) => (
-                        <Flex pt={2} key={todo.id}>
-                            <Checkbox
-                                onChange={(e) => { }}
-                                checked={todo.done}
-                            />
-                            <Input
-                                mx={2}
-                                value={todo.text}
-                                onChange={(evt) => (todo.text = evt.target.value)}
-                            />
-                            <Button
-                                onClick={() => {
+                <Checkbox onChange={(e) => dispatch(showCompleted(e.target.checked))}>Show only completed</Checkbox>
+            </SimpleGrid>
+            {
+                todos.map((todo: any) => (
+                    <Flex pt={2} key={todo.id}>
+                        <Checkbox
+                            onChange={(e) => dispatch(setCompleted({ id: todo.id, done: e.target.checked }))}
+                            checked={todo.done}
+                        />
+                        <Input
+                            mx={2}
+                            value={todo.text}
+                            onChange={(evt) => dispatch(setText({ id: todo.id, done: evt.target.value }))}
+                        />
+                        <Button
+                            onClick={() => {
+                                dispatch(removeTodo(todo.id))
+                            }}
+                        >
+                            Delete
+                        </Button>
+                    </Flex>
+                ))
+            }
+        </>
+    );
 
-                                }}
-                            >
-                                Delete
-                            </Button>
-                        </Flex>
-                    ))
-                }
-            </>
-        );
-    }
 }
 
