@@ -4,7 +4,7 @@ import { getRequest } from '../../app/axiosClient'
 import { AxiosResponse } from 'axios';
 
 
-function* setTodosAPI() {
+function* loadTodosAPI() {
     try {
         const response: AxiosResponse = yield call(() => getRequest("todos"));
         yield put(setTodos(response.data));
@@ -15,5 +15,5 @@ function* setTodosAPI() {
 
 
 export function* todosSaga() {
-    yield all([takeLatest(loadTodos, setTodosAPI)]);
+    yield all([takeLatest(loadTodos, loadTodosAPI)]);
 }
