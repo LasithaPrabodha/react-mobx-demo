@@ -6,8 +6,14 @@ export interface Todo {
     done: boolean;
 }
 
+interface IState {
+    todos: Todo[];
+    loader: boolean;
+    showCompleted: boolean;
+    errorMsg: string;
+}
 
-const initialState: { todos: Todo[], loader: boolean, showCompleted: boolean, errorMsg: string } = {
+const initialState: IState = {
     todos: [],
     loader: false,
     showCompleted: false,
