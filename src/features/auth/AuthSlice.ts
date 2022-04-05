@@ -18,6 +18,7 @@ const authenticationSlice = createSlice({
     reducers: {
         init(state) {
             state.isAuthenticated = !!localStorage.getItem('access_token');
+            state.user = JSON.parse(String(localStorage.getItem('user')));
         },
         login(state, action) {
             state.loader = true;
@@ -31,6 +32,7 @@ const authenticationSlice = createSlice({
             state.isAuthenticated = !!action.payload.access_token;
             state.user = action.payload.user;
             localStorage.setItem('access_token', action.payload.access_token)
+            localStorage.setItem('user', action.payload.user)
         },
         loginFailure(state) {
             state.loader = false;
