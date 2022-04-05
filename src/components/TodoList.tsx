@@ -1,12 +1,20 @@
 import React, { useEffect } from "react";
-import { Button, Input, Flex, Checkbox, Heading, SimpleGrid } from "@chakra-ui/react";
+import { Button, Input, Flex, Checkbox, Heading, SimpleGrid, CheckboxGroup, Stack } from "@chakra-ui/react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../app/store";
-import { loadTodos, removeTodo, setCompleted, setText, showCompleted } from "../features/todos/TodoSlice";
+import { loadTodos, removeTodo, showCompleted, updateTodo } from "../features/todos/TodoSlice";
 
 
 export default function TodoList() {
-    const todos = useSelector((state: RootState) => state.todos.todos)
+    const todos = useSelector((state: RootState) => {
+
+        if (state.todos.showCompleted) {
+            return state.todos.todos.filter(todo => todo.done)
+        }
+
+        return state.todos.todos
+
+    })
 
     const dispatch = useDispatch();
 
@@ -24,24 +32,27 @@ export default function TodoList() {
             </SimpleGrid>
             {
                 todos.map((todo: any) => (
-                    <Flex pt={2} key={todo.id}>
-                        <Checkbox
-                            onChange={(e) => dispatch(setCompleted({ id: todo.id, done: e.target.checked }))}
-                            checked={todo.done}
-                        />
-                        <Input
-                            mx={2}
-                            value={todo.text}
-                            onChange={(evt) => dispatch(setText({ id: todo.id, done: evt.target.value }))}
-                        />
-                        <Button
-                            onClick={() => {
-                                dispatch(removeTodo(todo.id))
-                            }}
-                        >
-                            Delete
-                        </Button>
-                    </Flex>
+                    <CheckboxGroup colorScheme='green' defaultValue={todos.filter(todo => todo.done).map(todo => todo.id)} key={todo.id}>
+                        <Stack>
+                            <Flex pt={2} >
+                                <Checkbox
+                                    value={todo.id}
+                                    onChange={(e) => dispatch(updateTodo({ ...todo, done: e.target.checked }))}
+                                    checked={todo.done}
+                                />
+                                <Input
+                                    mx={2}
+                                    value={todo.text}
+                                    onChange={(e) => dispatch(updateTodo({ ...todo, text: e.target.value }))}
+                                />
+                                <Button
+                                    onClick={() => { dispatch(removeTodo(todo.id)) }}
+                                >
+                                    Delete
+                                </Button>
+                            </Flex>
+                        </Stack>
+                    </CheckboxGroup>
                 ))
             }
         </>

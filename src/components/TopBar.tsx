@@ -1,22 +1,29 @@
 import React from "react";
-import { Button, Grid } from "@chakra-ui/react";
+import { Button, Flex, Text } from "@chakra-ui/react";
+import { connect } from "react-redux";
+import { RootState } from "../app/store";
+import { signOut } from "../features/auth/AuthSlice";
+import { Dispatch } from "redux";
 
 export class TopBar extends React.Component<any> {
-
-    onLoad = () => {
-    };
-
-    signOut = () => {
-    }
-
     render() {
         return (
-            <Grid mt={40} mb={6} templateColumns="1fr 1fr" columnGap="3" >
-                <Button onClick={this.onLoad}>Load</Button>
-                <Button onClick={this.signOut}>Sign out</Button>
-            </Grid>
+            <Flex mt={40}>
+                <Text fontSize='md' flex='1'>Hi {this.props.user.email}</Text>
+                <Button onClick={this.props.signOut}>Sign out</Button>
+            </Flex>
         );
     }
 }
 
-export default TopBar;
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+    signOut: () => dispatch(signOut()),
+})
+
+const mapStateToProps = (state: RootState) => ({
+    user: state.authentication.user
+})
+
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(TopBar);

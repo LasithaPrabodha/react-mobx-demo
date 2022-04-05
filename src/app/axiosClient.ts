@@ -32,8 +32,8 @@ export function postRequest(URL: string, payload: any): Promise<any> {
     return axiosClient.post(`/${URL}`, payload).then(response => response);
 }
 
-export function patchRequest(URL: string, payload: any) {
-    return axiosClient.patch(`/${URL}`, payload).then(response => response);
+export function putRequest(URL: string, payload: any) {
+    return axiosClient.put(`/${URL}`, payload).then(response => response);
 }
 
 export function deleteRequest(URL: string) {

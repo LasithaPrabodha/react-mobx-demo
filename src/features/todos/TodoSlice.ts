@@ -7,42 +7,47 @@ export interface Todo {
 }
 
 
-const initialState: { todos: Todo[], loader: boolean, showCompleted: boolean } = {
+const initialState: { todos: Todo[], loader: boolean, showCompleted: boolean, errorMsg: string } = {
     todos: [],
     loader: false,
     showCompleted: false,
+    errorMsg: ''
 }
 
 const todosSlice = createSlice({
     name: 'authentication',
     initialState,
     reducers: {
-        addTodo(state, action) {
-            state.todos = [...state.todos, {
-                id: Math.max(0, Math.max(...state.todos.map(({ id }) => id))) + 1,
-                text: action.payload,
-                done: false,
-            }];
-        },
         removeTodo(state, action) {
+            state.loader = true
+        },
+        loadTodos(state) {
+            state.loader = true
+        },
+        updateTodo(state, action) {
+            state.loader = true
+        },
+        addTodo(state, action) {
+            state.loader = true
+        },
+        addTodoSuccess(state, action) {
+            state.todos = [...state.todos, action.payload];
+        },
+        removeTodoSuccess(state, action) {
             state.todos = state.todos.filter((todo) => todo.id !== action.payload);;
         },
         setTodos(state, action) {
             state.todos = action.payload
             state.loader = false
         },
-        loadTodos(state) {
-            state.loader = true
-        },
-        setCompleted(state, action) {
+        updateTodoSuccess(state, action) {
             const i = state.todos.findIndex(todo => todo.id === action.payload.id)
 
             state.todos[i].done = action.payload.done;
-        },
-        setText(state, action) {
-            const i = state.todos.findIndex(todo => todo.id === action.payload.id)
-
             state.todos[i].text = action.payload.text;
+        },
+        setEror(state, action) {
+            state.errorMsg = action.payload;
         },
         showCompleted(state, action) {
             state.showCompleted = action.payload
@@ -50,5 +55,5 @@ const todosSlice = createSlice({
     },
 });
 
-export const { addTodo, removeTodo, setTodos, loadTodos, setCompleted, showCompleted, setText } = todosSlice.actions;
+export const { addTodo, removeTodo, setTodos, loadTodos, updateTodo, showCompleted, updateTodoSuccess, addTodoSuccess, setEror, removeTodoSuccess } = todosSlice.actions;
 export default todosSlice.reducer;

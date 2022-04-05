@@ -1,5 +1,5 @@
 import { all, call, put, takeLatest } from 'redux-saga/effects'
-import { login, loginSuccess, loginFailure, init } from './AuthSlice';
+import { login, loginSuccess, loginFailure } from './AuthSlice';
 import { postRequest } from '../../app/axiosClient'
 import { AxiosResponse } from 'axios';
 
@@ -12,6 +12,7 @@ function* loginAPI(action: ReturnType<typeof login>) {
         yield put(loginFailure());
     }
 }
+
 
 
 export function* authenticateSaga() {
